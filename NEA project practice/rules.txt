@@ -1,0 +1,13 @@
+Player 1 takes the top card from the deck
+
+player 2 takes the next card from the deck
+
+if both players have a card of the same colour, the player with the highest number wins
+
+if both players have cards with different colours, the winning colour is shown in the table
+
+Colour    Beats
+----------------
+Red      Black
+Yellow   Red
+Black    Yellow

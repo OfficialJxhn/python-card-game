@@ -1,0 +1,14 @@
+The nth term of this sequence can be found by finding a pattern in the differences between the terms. The first differences between the terms are 18, 30, 42, 54, and 66. The second differences between these first differences are all 12. This indicates that the sequence is quadratic and can be represented by an equation of the form an^2 + bn + c.
+
+To find the values of a, b, and c, we can use the first three terms of the sequence. Substituting n = 1, 2, and 3 into the equation an^2 + bn + c and setting the result equal to the first three terms of the sequence (8, 26, and 56), we get a system of three equations:
+
+a + b + c = 8
+4a + 2b + c = 26
+9a + 3b + c = 56
+
+Solving this system of equations, we find that a = 6, b = -1, and c = 3. Therefore, the nth term of this sequence is given by the formula **6n^2 - n + 3**.
+
+
+def count_squares(cuts):
+    sum = 6*cuts**2 - cuts + 3 + (cuts-1)
+    return sum

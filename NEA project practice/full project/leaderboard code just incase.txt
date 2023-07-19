@@ -1,0 +1,62 @@
+def submit_name(name_entry, name_window):
+    name = name_entry.get()
+    name_window.destroy()
+    return name, name_window
+
+def show_name_window():
+    name_window = Toplevel()
+    name_label = Label(name_window, text="Enter your name to be added to the leaderboard: ")
+    name_entry = Entry(name_window)
+    name_button = Button(name_window, text="Enter and quit", command=lambda: submit_name(name_entry, name_window))
+    name_button.pack()
+    name_label.pack()
+    name_entry.pack()
+    name_window.mainloop()
+
+def update_leaderboard(p1_card_total, p2_card_total):
+    try:
+        read_leaderboard = pd.read_csv("leaderboard.csv")
+    except FileNotFoundError:
+        read_leaderboard = pd.DataFrame(columns=["Name", "Score"])
+
+    if p1_card_total > p2_card_total:
+        top_5_leaderboard = read_leaderboard.sort_values(by="Score", ascending=False).iloc[:5]
+        if p1_card_total > top_5_leaderboard["Score"].min():
+            name, name_window = show_name_window()
+            new_person = pd.DataFrame({
+                "Name": [name],
+                "Score": [p1_card_total]
+            })
+            read_leaderboard = pd.concat([read_leaderboard, new_person])
+            read_leaderboard = read_leaderboard.sort_values(by="Score", ascending=False).iloc[:5]
+            read_leaderboard.to_csv("leaderboard.csv", index=False)
+
+    elif p1_card_total < p2_card_total:
+        top_5_leaderboard = read_leaderboard.sort_values(by="Score", ascending=False).iloc[:5]
+        if p2_card_total > top_5_leaderboard["Score"].min():
+            name, name_window = show_name_window()
+            new_person = pd.DataFrame({
+                "Name": [name],
+                "Score": [p2_card_total]
+            })
+            read_leaderboard = pd.concat([read_leaderboard, new_person])
+            read_leaderboard = read_leaderboard.sort_values(by="Score", ascending=False).iloc[:5]
+            read_leaderboard.to_csv("leaderboard.csv", index=False)
+
+
+
+
+def leaderboard():
+    import pandas as pd
+    leaderboard_gui = Tk()
+    leaderboard_gui.geometry("200x150")
+    leaderboard_gui.title("Leaderboard")
+    title_leaderboard = Label(leaderboard_gui,text="👑THE HALL OF FAME👑")
+    leaderboard_data = pd.read_csv("Leaderboard.csv")
+    top5 = leaderboard_data.sort_values(by='Score', ascending=False).iloc[:5]
+    listbox = Listbox(leaderboard_gui, height=5)
+    for index, row in top5.iterrows():
+        listbox.insert(index,f'{row["Name"]}: {row["Score"]}')
+    title_leaderboard.pack()
+    listbox.pack()
+    leaderboard_gui.update()
